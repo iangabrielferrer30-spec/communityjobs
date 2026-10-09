@@ -1,0 +1,2468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CommunityJobs | Job Posting & Application System</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+
+        :root {
+            --beige: #f5eee2;
+            --light-beige: #fbf8f2;
+            --cream: #fffdf9;
+            --brown: #795548;
+            --dark-brown: #4e342e;
+            --soft-brown: #a1887f;
+            --green: #6d8b74;
+            --light-green: #e6eee7;
+            --text: #403833;
+            --muted: #8a817a;
+            --border: #e6ddd0;
+            --white: #ffffff;
+            --shadow: 0 8px 25px rgba(91, 72, 53, 0.08);
+        }
+
+        body {
+            background: var(--beige);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        button,
+        input,
+        select,
+        textarea {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        /* ================= HEADER ================= */
+
+        header {
+            height: 72px;
+            background: rgba(255, 253, 249, 0.95);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 5%;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 21px;
+            font-weight: 700;
+            color: var(--dark-brown);
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--brown);
+            color: white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 19px;
+        }
+
+        nav {
+            display: flex;
+            gap: 8px;
+        }
+
+        nav button {
+            border: none;
+            background: transparent;
+            color: var(--muted);
+            padding: 10px 15px;
+            border-radius: 10px;
+            transition: 0.2s;
+        }
+
+        nav button:hover,
+        nav button.active {
+            background: var(--beige);
+            color: var(--dark-brown);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .profile-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            background: var(--light-green);
+            color: var(--green);
+            font-weight: bold;
+        }
+
+        .menu-btn {
+            display: none;
+            border: none;
+            background: transparent;
+            font-size: 25px;
+        }
+
+        /* ================= GENERAL ================= */
+
+        .page {
+            display: none;
+            max-width: 1250px;
+            margin: auto;
+            padding: 40px 25px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section-title {
+            margin-bottom: 8px;
+            color: var(--dark-brown);
+            font-size: 28px;
+        }
+
+        .section-subtitle {
+            color: var(--muted);
+            margin-bottom: 28px;
+        }
+
+        .btn {
+            border: none;
+            border-radius: 11px;
+            padding: 11px 18px;
+            transition: 0.2s;
+            font-weight: 600;
+        }
+
+        .btn-primary {
+            background: var(--brown);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--dark-brown);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: var(--beige);
+            color: var(--dark-brown);
+        }
+
+        .btn-secondary:hover {
+            background: #eadfce;
+        }
+
+        .btn-green {
+            background: var(--green);
+            color: white;
+        }
+
+        .btn-danger {
+            background: #f4dfdb;
+            color: #9a5145;
+        }
+
+        /* ================= HERO ================= */
+
+        .hero {
+            background: var(--cream);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 55px;
+            box-shadow: var(--shadow);
+            display: grid;
+            grid-template-columns: 1.4fr 0.6fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            line-height: 1.1;
+            color: var(--dark-brown);
+            margin-bottom: 18px;
+        }
+
+        .hero h1 span {
+            color: var(--green);
+        }
+
+        .hero p {
+            color: var(--muted);
+            font-size: 17px;
+            line-height: 1.7;
+            max-width: 650px;
+            margin-bottom: 25px;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .hero-visual {
+            background: var(--light-beige);
+            border-radius: 22px;
+            min-height: 250px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .people-icon {
+            font-size: 100px;
+        }
+
+        .floating-card {
+            position: absolute;
+            background: white;
+            padding: 13px 17px;
+            border-radius: 14px;
+            box-shadow: var(--shadow);
+            font-size: 13px;
+        }
+
+        .float-one {
+            top: 25px;
+            right: 15px;
+        }
+
+        .float-two {
+            bottom: 25px;
+            left: 15px;
+        }
+
+        /* ================= SEARCH ================= */
+
+        .search-box {
+            background: var(--cream);
+            padding: 18px;
+            border-radius: 18px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr auto;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .input {
+            width: 100%;
+            border: 1px solid var(--border);
+            background: #fffdf9;
+            padding: 12px 14px;
+            border-radius: 10px;
+            outline: none;
+            color: var(--text);
+        }
+
+        .input:focus {
+            border-color: var(--soft-brown);
+            box-shadow: 0 0 0 3px rgba(121, 85, 72, 0.08);
+        }
+
+        /* ================= JOB CARDS ================= */
+
+        .job-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+        }
+
+        .job-card {
+            background: var(--cream);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 22px;
+            box-shadow: var(--shadow);
+            transition: 0.2s;
+        }
+
+        .job-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(91, 72, 53, 0.12);
+        }
+
+        .job-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .company-icon {
+            width: 45px;
+            height: 45px;
+            background: var(--beige);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 21px;
+        }
+
+        .job-card h3 {
+            margin-top: 18px;
+            color: var(--dark-brown);
+            font-size: 19px;
+        }
+
+        .company {
+            color: var(--muted);
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .job-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 7px;
+            margin: 15px 0;
+        }
+
+        .tag {
+            background: var(--light-green);
+            color: #55705b;
+            padding: 6px 9px;
+            border-radius: 8px;
+            font-size: 12px;
+        }
+
+        .job-description {
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 18px;
+        }
+
+        .job-bottom {
+            border-top: 1px solid var(--border);
+            padding-top: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .salary {
+            font-weight: 700;
+            color: var(--green);
+            font-size: 14px;
+        }
+
+        .save-btn {
+            border: none;
+            background: transparent;
+            font-size: 20px;
+            color: var(--soft-brown);
+        }
+
+        .save-btn.saved {
+            color: #bd765f;
+        }
+
+        /* ================= STATS ================= */
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: var(--cream);
+            border: 1px solid var(--border);
+            padding: 23px;
+            border-radius: 17px;
+            box-shadow: var(--shadow);
+        }
+
+        .stat-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--beige);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+
+        .stat-number {
+            font-size: 27px;
+            font-weight: 700;
+            color: var(--dark-brown);
+        }
+
+        .stat-label {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        /* ================= DASHBOARD ================= */
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+        }
+
+        .panel {
+            background: var(--cream);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 22px;
+            box-shadow: var(--shadow);
+        }
+
+        .panel h3 {
+            color: var(--dark-brown);
+            margin-bottom: 18px;
+        }
+
+        .application {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            padding: 15px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .application:last-child {
+            border-bottom: none;
+        }
+
+        .application-info strong {
+            display: block;
+            color: var(--dark-brown);
+            margin-bottom: 4px;
+        }
+
+        .application-info span {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .status {
+            padding: 6px 10px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status.pending {
+            background: #f5ecd4;
+            color: #92733b;
+        }
+
+        .status.review {
+            background: #e4ebf3;
+            color: #56708b;
+        }
+
+        .status.accepted {
+            background: var(--light-green);
+            color: #55705b;
+        }
+
+        /* ================= POST JOB ================= */
+
+        .form-container {
+            max-width: 800px;
+            margin: auto;
+            background: var(--cream);
+            border: 1px solid var(--border);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        .form-group {
+            margin-bottom: 17px;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 7px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--dark-brown);
+        }
+
+        textarea.input {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        /* ================= PROFILE ================= */
+
+        .profile-card {
+            max-width: 850px;
+            margin: auto;
+            background: var(--cream);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .profile-header {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 25px;
+            margin-bottom: 25px;
+        }
+
+        .avatar {
+            width: 75px;
+            height: 75px;
+            border-radius: 22px;
+            background: var(--brown);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .profile-header h2 {
+            color: var(--dark-brown);
+        }
+
+        .profile-header p {
+            color: var(--muted);
+            margin-top: 5px;
+        }
+
+        /* ================= MODAL ================= */
+
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(55, 44, 37, 0.45);
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 20px;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            width: 100%;
+            max-width: 550px;
+            max-height: 90vh;
+            overflow-y: auto;
+            background: var(--cream);
+            border-radius: 20px;
+            padding: 28px;
+            box-shadow: 0 20px 60px rgba(50, 40, 30, 0.2);
+            animation: modalIn 0.25s ease;
+        }
+
+        @keyframes modalIn {
+            from {
+                transform: scale(0.96);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h2 {
+            color: var(--dark-brown);
+        }
+
+        .close-btn {
+            border: none;
+            background: var(--beige);
+            width: 35px;
+            height: 35px;
+            border-radius: 9px;
+            font-size: 18px;
+        }
+
+        /* ================= TOAST ================= */
+
+        .toast {
+            position: fixed;
+            right: 25px;
+            bottom: 25px;
+            background: var(--dark-brown);
+            color: white;
+            padding: 14px 19px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: 0.3s;
+            z-index: 3000;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* ================= FOOTER ================= */
+
+        footer {
+            text-align: center;
+            color: var(--muted);
+            padding: 30px;
+            font-size: 13px;
+        }
+
+
+        /* ================= ACCOUNT / USER DASHBOARD ================= */
+        .account-area { display:flex; align-items:center; gap:10px; }
+        .account-name { color:var(--dark-brown); font-size:13px; font-weight:600; }
+        .dashboard-tabs { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:20px; }
+        .dashboard-tab { border:1px solid var(--border); background:var(--cream); color:var(--muted); padding:10px 14px; border-radius:10px; cursor:pointer; }
+        .dashboard-tab.active { background:var(--beige); color:var(--dark-brown); font-weight:600; }
+        .account-job { display:flex; align-items:center; justify-content:space-between; gap:15px; padding:16px 0; border-bottom:1px solid var(--border); }
+        .account-job:last-child { border-bottom:none; }
+        .account-job h4 { color:var(--dark-brown); margin-bottom:5px; }
+        .account-job p { color:var(--muted); font-size:13px; }
+        .job-actions { display:flex; gap:7px; flex-wrap:wrap; }
+        .small-btn { padding:8px 11px; border-radius:8px; border:1px solid var(--border); background:white; color:var(--dark-brown); cursor:pointer; font-size:12px; font-weight:600; }
+        .login-note { background:var(--light-green); color:#55705b; padding:12px 14px; border-radius:10px; margin-bottom:18px; font-size:13px; }
+        .auth-switch { text-align:center; margin-top:16px; color:var(--muted); font-size:13px; }
+        .auth-switch button { border:none; background:none; color:var(--brown); font-weight:700; cursor:pointer; }
+        .job-owner { color:var(--soft-brown); font-size:12px; margin-top:5px; }
+        .interaction-row { display:flex; gap:7px; margin-top:10px; flex-wrap:wrap; }
+        .comment-box { margin-top:12px; padding-top:12px; border-top:1px solid var(--border); display:none; }
+        .comment-box.show { display:block; }
+        .comment-box textarea { min-height:70px; margin-bottom:7px; }
+        .empty-state { text-align:center; padding:25px; color:var(--muted); }
+
+
+        /* ================= AUTH PAGE & USER UI ================= */
+        .auth-wrap{max-width:980px;margin:10px auto;display:grid;grid-template-columns:1fr 1.1fr;background:var(--cream);border:1px solid var(--border);border-radius:24px;box-shadow:var(--shadow);overflow:hidden}
+        .auth-aside{background:var(--brown);color:#fff;padding:44px 38px;display:flex;flex-direction:column;gap:18px;justify-content:center}
+        .auth-aside .logo-icon{background:rgba(255,255,255,.18)}
+        .auth-aside h2{font-size:30px;line-height:1.2}
+        .auth-aside p{opacity:.85;line-height:1.6}
+        .auth-aside ul{list-style:none;display:grid;gap:10px;font-size:14px}
+        .auth-aside li::before{content:"✓";margin-right:9px;color:#cfe3d3;font-weight:700}
+        .auth-card{padding:40px 38px}
+        .auth-tabs{display:flex;background:var(--beige);border-radius:12px;padding:4px;margin-bottom:24px}
+        .auth-tabs button{flex:1;border:none;background:transparent;padding:10px;border-radius:9px;color:var(--muted);font-weight:600}
+        .auth-tabs button.active{background:var(--white);color:var(--dark-brown);box-shadow:0 2px 8px rgba(91,72,53,.1)}
+        .auth-card h2{color:var(--dark-brown);margin-bottom:4px}
+        .auth-error{display:none;background:#f4dfdb;color:#9a5145;padding:11px 14px;border-radius:10px;margin-bottom:16px;font-size:13px}
+        .show-pw{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);margin-bottom:18px}
+        .show-pw input{width:auto}
+        .btn-block{width:100%;padding:13px}
+        .user-layout{display:grid;grid-template-columns:270px 1fr;gap:22px;align-items:start}
+        .user-side{position:sticky;top:92px;display:grid;gap:14px}
+        .user-card{background:var(--cream);border:1px solid var(--border);border-radius:18px;padding:22px;text-align:center;box-shadow:var(--shadow)}
+        .user-card .avatar{margin:0 auto 12px}
+        .user-card h3{color:var(--dark-brown)}
+        .user-card p{color:var(--muted);font-size:13px;word-break:break-all}
+        .role-pill{display:inline-block;margin-top:10px;background:var(--light-green);color:#55705b;padding:4px 10px;border-radius:99px;font-size:12px;font-weight:600}
+        .side-nav{background:var(--cream);border:1px solid var(--border);border-radius:18px;padding:8px;box-shadow:var(--shadow);display:grid;gap:2px}
+        .side-nav button{display:flex;justify-content:space-between;align-items:center;gap:10px;border:none;background:transparent;text-align:left;padding:11px 13px;border-radius:10px;color:var(--muted)}
+        .side-nav button:hover,.side-nav button.active{background:var(--beige);color:var(--dark-brown);font-weight:600}
+        .side-nav .count{background:var(--white);border-radius:99px;padding:1px 8px;font-size:12px}
+        .user-main h2{color:var(--dark-brown);margin-bottom:4px}
+        .user-main .panel{margin-bottom:18px}
+        .status.declined{background:#f4dfdb;color:#9a5145}
+        .status-select{border:1px solid var(--border);border-radius:8px;padding:6px 8px;background:#fff;font-size:12px}
+        @media(max-width:900px){.auth-wrap{grid-template-columns:1fr}.auth-aside{display:none}.auth-card{padding:28px 22px}.user-layout{grid-template-columns:1fr}.user-side{position:static}.side-nav{grid-auto-flow:column;overflow-x:auto}.side-nav button{white-space:nowrap}}
+
+        /* ================= RESPONSIVE ================= */
+
+        @media (max-width: 950px) {
+            nav {
+                display: none;
+                position: absolute;
+                top: 72px;
+                left: 0;
+                right: 0;
+                background: var(--cream);
+                padding: 15px;
+                border-bottom: 1px solid var(--border);
+                flex-direction: column;
+            }
+
+            nav.open {
+                display: flex;
+            }
+
+            .menu-btn {
+                display: block;
+            }
+
+            .hero {
+                grid-template-columns: 1fr;
+            }
+
+            .job-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .search-box {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 650px) {
+            header {
+                padding: 0 20px;
+            }
+
+            .page {
+                padding: 25px 15px;
+            }
+
+            .hero {
+                padding: 30px 22px;
+            }
+
+            .hero h1 {
+                font-size: 36px;
+            }
+
+            .job-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .search-box {
+                grid-template-columns: 1fr;
+            }
+
+            .stats {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full {
+                grid-column: auto;
+            }
+
+            .header-actions .btn {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">
+        <div class="logo-icon">CJ</div>
+        CommunityJobs
+    </div>
+
+    <nav id="navigation">
+        <button class="nav-btn active" data-page="home">Home</button>
+        <button class="nav-btn" data-page="jobs">Find Jobs</button>
+        <button class="nav-btn" data-page="applications">Applications</button>
+        <button class="nav-btn" data-page="post">Post a Job</button>
+    </nav>
+
+    <div class="header-actions">
+        <button class="btn btn-secondary" onclick="openPage('post')">
+            + Post Job
+        </button>
+
+        <div class="account-area">
+            <span class="account-name" id="headerAccountName"></span>
+            <button class="profile-btn" id="accountButton" onclick="handleAccountButton()">IF</button>
+        </div>
+
+        <button class="menu-btn" onclick="toggleMenu()">☰</button>
+    </div>
+</header>
+
+
+<!-- ================= HOME ================= -->
+
+<section class="page active" id="home">
+
+    <div class="hero">
+
+        <div>
+            <h1>
+                Find work.<br>
+                Build your <span>community.</span>
+            </h1>
+
+            <p>
+                A simple community-based platform where local employers
+                can post opportunities and job seekers can discover,
+                apply, and connect with employers.
+            </p>
+
+            <div class="hero-actions">
+                <button class="btn btn-primary" onclick="openPage('jobs')">
+                    Find a Job
+                </button>
+
+                <button class="btn btn-secondary" onclick="openPage('post')">
+                    Post a Job
+                </button>
+            </div>
+        </div>
+
+        <div class="hero-visual">
+            <div class="people-icon">👥</div>
+
+            <div class="floating-card float-one">
+                💼 128 Jobs Available
+            </div>
+
+            <div class="floating-card float-two">
+                ✓ 56 Applications
+            </div>
+        </div>
+
+    </div>
+
+    <br><br>
+
+    <h2 class="section-title">Why use CommunityJobs?</h2>
+    <p class="section-subtitle">
+        Designed to make local employment opportunities easier to find.
+    </p>
+
+    <div class="stats">
+
+        <div class="stat-card">
+            <div class="stat-icon">💼</div>
+            <div class="stat-number" id="homeJobs">128</div>
+            <div class="stat-label">Available Jobs</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">🏢</div>
+            <div class="stat-number">64</div>
+            <div class="stat-label">Local Employers</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">👥</div>
+            <div class="stat-number">1,240</div>
+            <div class="stat-label">Job Seekers</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">✓</div>
+            <div class="stat-number">438</div>
+            <div class="stat-label">Successful Hires</div>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= JOBS ================= -->
+
+<section class="page" id="jobs">
+
+    <h2 class="section-title">Find a Job</h2>
+
+    <p class="section-subtitle">
+        Search for opportunities that match your skills and interests.
+    </p>
+
+    <div class="search-box">
+
+        <input
+            type="text"
+            class="input"
+            id="searchInput"
+            placeholder="Search job title, company or keyword..."
+        >
+
+        <select class="input" id="categoryFilter">
+            <option value="all">All Categories</option>
+            <option value="Technology">Technology</option>
+            <option value="Construction">Construction</option>
+            <option value="Retail">Retail</option>
+            <option value="Food">Food Service</option>
+            <option value="Office">Office</option>
+        </select>
+
+        <select class="input" id="typeFilter">
+            <option value="all">All Job Types</option>
+            <option value="Full-time">Full-time</option>
+            <option value="Part-time">Part-time</option>
+            <option value="Contract">Contract</option>
+        </select>
+
+        <button class="btn btn-primary" onclick="filterJobs()">
+            Search
+        </button>
+
+    </div>
+
+    <div class="job-grid" id="jobGrid"></div>
+
+</section>
+
+
+<!-- ================= APPLICATIONS ================= -->
+
+<section class="page" id="applications">
+
+    <h2 class="section-title">My Applications</h2>
+
+    <p class="section-subtitle">
+        Track the jobs you have applied for.
+    </p>
+
+    <div class="dashboard-grid">
+
+        <div class="panel">
+
+            <h3>Application History</h3>
+
+            <div id="applicationList">
+
+                <div class="application">
+                    <div class="application-info">
+                        <strong>Web Developer</strong>
+                        <span>Community Tech Solutions • Applied Sept. 20</span>
+                    </div>
+
+                    <span class="status review">
+                        Under Review
+                    </span>
+                </div>
+
+                <div class="application">
+                    <div class="application-info">
+                        <strong>Office Assistant</strong>
+                        <span>Local Business Center • Applied Sept. 18</span>
+                    </div>
+
+                    <span class="status pending">
+                        Pending
+                    </span>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="panel">
+
+            <h3>Application Summary</h3>
+
+            <div class="stat-card">
+                <div class="stat-number" id="applicationCount">2</div>
+                <div class="stat-label">Applications Sent</div>
+            </div>
+
+            <br>
+
+            <div class="stat-card">
+                <div class="stat-number">1</div>
+                <div class="stat-label">Under Review</div>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= POST JOB ================= -->
+
+<section class="page" id="post">
+
+    <h2 class="section-title">Post a Job</h2>
+
+    <p class="section-subtitle">
+        Help people in your community discover your job opportunity.
+    </p>
+
+    <div class="form-container">
+
+        <form id="jobForm">
+
+            <div class="form-grid">
+
+                <div class="form-group">
+                    <label>Job Title</label>
+                    <input
+                        class="input"
+                        id="jobTitle"
+                        required
+                        placeholder="e.g. Office Assistant"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label>Company / Employer</label>
+                    <input
+                        class="input"
+                        id="jobCompany"
+                        required
+                        placeholder="Company name"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label>Category</label>
+
+                    <select class="input" id="jobCategory" required>
+                        <option value="">Select category</option>
+                        <option>Technology</option>
+                        <option>Construction</option>
+                        <option>Retail</option>
+                        <option>Food</option>
+                        <option>Office</option>
+                    </select>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Job Type</label>
+
+                    <select class="input" id="jobType" required>
+                        <option value="">Select type</option>
+                        <option>Full-time</option>
+                        <option>Part-time</option>
+                        <option>Contract</option>
+                    </select>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Location</label>
+
+                    <input
+                        class="input"
+                        id="jobLocation"
+                        required
+                        placeholder="e.g. Taytay, Rizal"
+                    >
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Salary</label>
+
+                    <input
+                        class="input"
+                        id="jobSalary"
+                        placeholder="e.g. ₱18,000 - ₱22,000"
+                    >
+
+                </div>
+
+                <div class="form-group full">
+
+                    <label>Job Description</label>
+
+                    <textarea
+                        class="input"
+                        id="jobDescription"
+                        required
+                        placeholder="Describe the job responsibilities and requirements..."
+                    ></textarea>
+
+                </div>
+
+            </div>
+
+            <button class="btn btn-primary" type="submit">
+                Publish Job
+            </button>
+
+        </form>
+
+    </div>
+
+</section>
+
+
+
+<!-- ================= LOGIN / REGISTER PAGE ================= -->
+<section class="page" id="authPage">
+    <div class="auth-wrap">
+        <div class="auth-aside">
+            <div class="logo-icon">CJ</div>
+            <h2>Welcome to your community.</h2>
+            <p>One account for finding work and hiring locally.</p>
+            <ul>
+                <li>Apply to local jobs in minutes</li>
+                <li>Post openings and manage applicants</li>
+                <li>Save jobs and track every application</li>
+            </ul>
+        </div>
+
+        <div class="auth-card">
+            <div class="auth-tabs">
+                <button type="button" id="tabLogin" onclick="openAuth('login')">Log In</button>
+                <button type="button" id="tabRegister" onclick="openAuth('register')">Create Account</button>
+            </div>
+
+            <h2 id="authTitle">Log In</h2>
+            <p class="section-subtitle" id="authSub"></p>
+            <div class="auth-error" id="authError"></div>
+
+            <form id="authForm">
+                <div id="registerFields" style="display:none;">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input class="input" id="authName" placeholder="Enter your full name" autocomplete="name">
+                    </div>
+                    <div class="form-group">
+                        <label>I am a...</label>
+                        <select class="input" id="authRole">
+                            <option>Job Seeker</option>
+                            <option>Employer</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input class="input" type="email" id="authEmail" required placeholder="you@example.com" autocomplete="email">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input class="input" type="password" id="authPassword" required placeholder="Enter your password" autocomplete="current-password">
+                </div>
+                <div class="form-group" id="confirmField" style="display:none;">
+                    <label>Confirm Password</label>
+                    <input class="input" type="password" id="authConfirm" placeholder="Re-enter your password" autocomplete="new-password">
+                </div>
+                <label class="show-pw"><input type="checkbox" onchange="togglePw(this.checked)"> Show password</label>
+                <button class="btn btn-primary btn-block" id="authSubmit" type="submit">Log In</button>
+            </form>
+
+            <div class="auth-switch">
+                <span id="authSwitchText">Don't have an account?</span>
+                <button type="button" onclick="toggleAuthMode()" id="authSwitchButton">Create Account</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ================= USER DASHBOARD ================= -->
+<section class="page" id="accountDashboard">
+    <div class="user-layout">
+        <aside class="user-side">
+            <div class="user-card">
+                <div class="avatar" id="dashboardAvatar">U</div>
+                <h3 id="dashboardName">User</h3>
+                <p id="dashboardEmail"></p>
+                <span class="role-pill" id="dashboardRole">Job Seeker</span>
+            </div>
+            <div class="side-nav" id="sideNav">
+                <button data-tab="overview" onclick="showAccountTab('overview')">🏠 Overview</button>
+                <button data-tab="posted" onclick="showAccountTab('posted')">📢 My Jobs <span class="count" data-count="posted"></span></button>
+                <button data-tab="applicants" onclick="applicantFilter=null;showAccountTab('applicants')">👥 Applicants <span class="count" data-count="applicants"></span></button>
+                <button data-tab="applications" onclick="showAccountTab('applications')">📨 My Applications <span class="count" data-count="applications"></span></button>
+                <button data-tab="saved" onclick="showAccountTab('saved')">♥ Saved Jobs <span class="count" data-count="saved"></span></button>
+                <button data-tab="settings" onclick="showAccountTab('settings')">⚙️ Settings</button>
+            </div>
+            <button class="btn btn-danger" onclick="logout()">Log Out</button>
+        </aside>
+        <div class="user-main" id="accountTabContent"></div>
+    </div>
+</section>
+
+<!-- ================= PROFILE ================= -->
+
+<section class="page" id="profile">
+
+    <h2 class="section-title">My Profile</h2>
+
+    <p class="section-subtitle">
+        Manage your CommunityJobs account.
+    </p>
+
+    <div class="profile-card">
+
+        <div class="profile-header">
+            <div class="avatar" id="legacyAvatar">U</div>
+            <div>
+                <h2 id="legacyName">Community Member</h2>
+                <p>Job Seeker • Community Member</p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Full Name</label>
+            <input class="input" id="legacyNameInput" value="">
+        </div>
+
+        <div class="form-group">
+            <label>Email Address</label>
+            <input class="input" id="legacyEmailInput" value="">
+        </div>
+
+        <div class="form-group">
+            <label>Skills</label>
+            <input
+                class="input"
+                value="Computer Engineering, CAD, Basic Programming"
+            >
+        </div>
+
+        <button class="btn btn-primary" onclick="showToast('Profile updated successfully!')">
+            Save Changes
+        </button>
+
+    </div>
+
+</section>
+
+
+<footer>
+    © 2026 CommunityJobs • Connecting people with local opportunities
+</footer>
+
+
+
+<!-- ================= APPLY MODAL ================= -->
+
+<div class="modal" id="applyModal">
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+
+            <h2>Apply for Job</h2>
+
+            <button
+                class="close-btn"
+                onclick="closeModal()">
+                ×
+            </button>
+
+        </div>
+
+        <form id="applicationForm">
+
+            <input type="hidden" id="selectedJob">
+
+            <div class="form-group">
+
+                <label>Full Name</label>
+
+                <input
+                    class="input"
+                    id="applicantName"
+                    required
+                    placeholder="Enter your full name"
+                >
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Email</label>
+
+                <input
+                    class="input"
+                    type="email"
+                    id="applicantEmail"
+                    required
+                    placeholder="Enter your email"
+                >
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Phone Number</label>
+
+                <input
+                    class="input"
+                    id="applicantPhone"
+                    required
+                    placeholder="09XXXXXXXXX"
+                >
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Short Message</label>
+
+                <textarea
+                    class="input"
+                    id="applicantMessage"
+                    placeholder="Tell the employer briefly why you are interested..."
+                ></textarea>
+
+            </div>
+
+            <button class="btn btn-primary" type="submit">
+                Submit Application
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- ================= TOAST ================= -->
+
+<div class="toast" id="toast"></div>
+
+
+<script>
+
+    /* ==========================================
+       INITIAL JOB DATA
+    ========================================== */
+
+    const defaultJobs = [
+        {
+            id: 1,
+            title: "Junior Web Developer",
+            company: "Community Tech Solutions",
+            category: "Technology",
+            type: "Full-time",
+            location: "Cainta, Rizal",
+            salary: "₱25,000 - ₱30,000",
+            icon: "💻",
+            description: "Assist in building and maintaining websites and simple web applications."
+        },
+
+        {
+            id: 2,
+            title: "Construction Helper",
+            company: "Rizal Builders",
+            category: "Construction",
+            type: "Full-time",
+            location: "Taytay, Rizal",
+            salary: "₱18,000 - ₱22,000",
+            icon: "🏗️",
+            description: "Assist construction workers with daily site activities and material preparation."
+        },
+
+        {
+            id: 3,
+            title: "Store Assistant",
+            company: "Community Mart",
+            category: "Retail",
+            type: "Part-time",
+            location: "Angono, Rizal",
+            salary: "₱600 / day",
+            icon: "🛒",
+            description: "Assist customers, organize products, and help maintain the store."
+        },
+
+        {
+            id: 4,
+            title: "Restaurant Service Crew",
+            company: "Kain Tayo Restaurant",
+            category: "Food",
+            type: "Full-time",
+            location: "Cainta, Rizal",
+            salary: "₱17,000 - ₱20,000",
+            icon: "🍽️",
+            description: "Provide friendly customer service and assist with restaurant operations."
+        },
+
+        {
+            id: 5,
+            title: "Office Assistant",
+            company: "Local Business Center",
+            category: "Office",
+            type: "Full-time",
+            location: "Taytay, Rizal",
+            salary: "₱20,000 - ₱24,000",
+            icon: "📁",
+            description: "Handle documents, basic computer tasks, filing, and administrative support."
+        },
+
+        {
+            id: 6,
+            title: "Graphic Designer",
+            company: "Creative Community PH",
+            category: "Technology",
+            type: "Contract",
+            location: "Remote",
+            salary: "₱20,000 - ₱35,000",
+            icon: "🎨",
+            description: "Create social media graphics, posters, advertisements, and digital materials."
+        }
+    ];
+
+
+    let jobs = JSON.parse(localStorage.getItem("communityJobs"));
+
+    if (!jobs) {
+        jobs = defaultJobs;
+        localStorage.setItem("communityJobs", JSON.stringify(jobs));
+    }
+
+    /* ==========================================
+       ACCOUNT SYSTEM
+    ========================================== */
+
+    let currentUser = JSON.parse(localStorage.getItem("communityCurrentUser") || "null");
+    let authMode = "login";
+
+    function getAccounts() {
+        return JSON.parse(localStorage.getItem("communityAccounts") || "[]");
+    }
+
+    function saveAccounts(accounts) {
+        localStorage.setItem("communityAccounts", JSON.stringify(accounts));
+    }
+
+    function openAuth(mode = "login") {
+        authMode = mode;
+        openPage("authPage");
+        updateAuthUI();
+    }
+
+    function closeAuth() {
+        document.getElementById("authForm").reset();
+        setAuthError("");
+    }
+
+    function toggleAuthMode() {
+        openAuth(authMode === "login" ? "register" : "login");
+    }
+
+    function setAuthError(msg) {
+        const el = document.getElementById("authError");
+        el.innerText = msg;
+        el.style.display = msg ? "block" : "none";
+    }
+
+    function togglePw(show) {
+        ["authPassword", "authConfirm"].forEach(id => document.getElementById(id).type = show ? "text" : "password");
+    }
+
+    function updateAuthUI() {
+        const register = authMode === "register";
+        setAuthError("");
+        document.getElementById("authTitle").innerText = register ? "Create your account" : "Welcome back";
+        document.getElementById("authSub").innerText = register ? "Join CommunityJobs to apply, post and save jobs." : "Log in to manage your jobs and applications.";
+        document.getElementById("authSubmit").innerText = register ? "Create Account" : "Log In";
+        document.getElementById("registerFields").style.display = register ? "block" : "none";
+        document.getElementById("confirmField").style.display = register ? "block" : "none";
+        document.getElementById("authName").required = register;
+        document.getElementById("authConfirm").required = register;
+        document.getElementById("authPassword").autocomplete = register ? "new-password" : "current-password";
+        document.getElementById("authSwitchText").innerText = register ? "Already have an account?" : "Don't have an account?";
+        document.getElementById("authSwitchButton").innerText = register ? "Log In" : "Create Account";
+        document.getElementById("tabLogin").classList.toggle("active", !register);
+        document.getElementById("tabRegister").classList.toggle("active", register);
+    }
+
+    let afterAuth = "accountDashboard";
+    let currentPageId = "home";
+    let accountTab = "overview";
+    let applicantFilter = null;
+
+    function esc(s) {
+        return String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+    }
+
+    function isSaved(id) {
+        return !!currentUser && JSON.parse(localStorage.getItem("savedJobs_" + currentUser.id) || "[]").includes(id);
+    }
+
+    async function hashPw(pw) {
+        try {
+            const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode("cj::" + pw));
+            return "sha256:" + Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, "0")).join("");
+        } catch (e) {
+            return pw;
+        }
+    }
+
+    function startSession(account, message) {
+        currentUser = { id: account.id, name: account.name, email: account.email, role: account.role || "Job Seeker" };
+        localStorage.setItem("communityCurrentUser", JSON.stringify(currentUser));
+        document.getElementById("authForm").reset();
+        refreshAccountUI();
+        showToast(message);
+        const target = afterAuth;
+        afterAuth = "accountDashboard";
+        openPage(target);
+    }
+
+    document.getElementById("authForm").addEventListener("submit", async function(event) {
+        event.preventDefault();
+        setAuthError("");
+
+        const email = document.getElementById("authEmail").value.trim().toLowerCase();
+        const password = document.getElementById("authPassword").value;
+        const accounts = getAccounts();
+
+        if (authMode === "register") {
+            const name = document.getElementById("authName").value.trim();
+            if (name.length < 2) return setAuthError("Please enter your full name.");
+            if (password.length < 6) return setAuthError("Password must be at least 6 characters.");
+            if (password !== document.getElementById("authConfirm").value) return setAuthError("Passwords do not match.");
+            if (accounts.some(a => a.email === email)) return setAuthError("An account with this email already exists.");
+
+            const account = {
+                id: "user_" + Date.now(),
+                name,
+                email,
+                password: await hashPw(password),
+                role: document.getElementById("authRole").value
+            };
+            accounts.push(account);
+            saveAccounts(accounts);
+            startSession(account, "Account created. Welcome, " + name.split(" ")[0] + "!");
+        } else {
+            const hashed = await hashPw(password);
+            const account = accounts.find(a => a.email === email && (a.password === hashed || a.password === password));
+            if (!account) return setAuthError("Incorrect email or password.");
+
+            if (account.password !== hashed) {   // upgrade old plain-text passwords
+                account.password = hashed;
+                saveAccounts(accounts);
+            }
+            startSession(account, "Welcome back, " + account.name.split(" ")[0] + "!");
+        }
+    });
+
+        function logout() {
+        currentUser = null;
+        localStorage.removeItem("communityCurrentUser");
+        refreshAccountUI();
+        showToast("You have been logged out.");
+        openPage("home");
+    }
+
+    function requireLogin(action = "continue") {
+        if (currentUser) return true;
+        showToast("Please log in to " + action + ".");
+        afterAuth = currentPageId;
+        closeModal();
+        openAuth("login");
+        return false;
+    }
+
+    function handleAccountButton() {
+        if (currentUser) openPage("accountDashboard");
+        else openAuth("login");
+    }
+
+    function refreshAccountUI() {
+        const button = document.getElementById("accountButton");
+        const name = document.getElementById("headerAccountName");
+
+        if (currentUser) {
+            const initials = currentUser.name.split(/\s+/).map(x => x[0]).join("").slice(0,2).toUpperCase();
+            button.innerText = initials || "U";
+            name.innerText = currentUser.name;
+        } else {
+            button.innerText = "👤";
+            name.innerText = "Log in";
+        }
+
+        filterJobs();
+        updateApplicationList();
+        if (currentUser) renderAccountDashboard();
+    }
+
+    const STATUSES = ["Pending", "Under Review", "Accepted", "Declined"];
+    function sc(s) { return ({"Pending":"pending","Under Review":"review","Accepted":"accepted","Declined":"declined"})[s] || "pending"; }
+    function badge(s) { return `<span class="status ${sc(s)}">${esc(s)}</span>`; }
+    function emptyBox(msg, btn) { return `<div class="empty-state">${msg} ${btn || ""}</div>`; }
+    function acRow(title, lines, right) {
+        const p = [].concat(lines).filter(Boolean).map(l => `<p>${esc(l)}</p>`).join("");
+        return `<div class="account-job"><div><h4>${esc(title)}</h4>${p}</div>${right || ""}</div>`;
+    }
+    function stat(icon, n, label) {
+        return `<div class="stat-card"><div class="stat-icon">${icon}</div><div class="stat-number">${n}</div><div class="stat-label">${label}</div></div>`;
+    }
+
+    function myData() {
+        const apps = JSON.parse(localStorage.getItem("applications") || "[]");
+        const saved = JSON.parse(localStorage.getItem("savedJobs_" + currentUser.id) || "[]");
+        const mine = jobs.filter(j => j.ownerId === currentUser.id);
+        const ids = mine.map(j => j.id);
+        return {
+            mine,
+            apps,
+            myApps: apps.filter(a => a.ownerId === currentUser.id),
+            received: apps.filter(a => ids.includes(a.jobId)),
+            savedJobs: jobs.filter(j => saved.includes(j.id))
+        };
+    }
+
+    function showAccountTab(tab) {
+        accountTab = tab;
+        renderAccountDashboard();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function renderAccountDashboard() {
+        if (!currentUser) return;
+        const d = myData();
+        const initials = currentUser.name.split(/\s+/).map(x => x[0]).join("").slice(0, 2).toUpperCase();
+
+        document.getElementById("dashboardName").innerText = currentUser.name;
+        document.getElementById("dashboardEmail").innerText = currentUser.email;
+        document.getElementById("dashboardAvatar").innerText = initials;
+        document.getElementById("dashboardRole").innerText = currentUser.role || "Job Seeker";
+        document.querySelectorAll("#sideNav button").forEach(b => b.classList.toggle("active", b.dataset.tab === accountTab));
+
+        const counts = { posted: d.mine.length, applicants: d.received.length, applications: d.myApps.length, saved: d.savedJobs.length };
+        document.querySelectorAll("#sideNav .count").forEach(el => el.innerText = counts[el.dataset.count]);
+
+        const c = document.getElementById("accountTabContent");
+        const browse = `<button class="btn btn-secondary" onclick="openPage('jobs')">Browse Jobs</button>`;
+
+        if (accountTab === "overview") {
+            c.innerHTML = `
+                <h2>Hi, ${esc(currentUser.name.split(" ")[0])} 👋</h2>
+                <p class="section-subtitle">Here's what's happening on your account.</p>
+                <div class="stats">
+                    ${stat("📢", d.mine.length, "Jobs Posted")}
+                    ${stat("👥", d.received.length, "Applicants Received")}
+                    ${stat("📨", d.myApps.length, "Applications Sent")}
+                    ${stat("♥", d.savedJobs.length, "Saved Jobs")}
+                </div>
+                <div class="panel">
+                    <h3>Recent Applications</h3>
+                    ${d.myApps.length ? d.myApps.slice(-3).reverse().map(a => acRow(a.jobTitle, a.company + " • Applied " + a.date, badge(a.status))).join("") : emptyBox("No applications yet.", browse)}
+                </div>
+                <div class="panel">
+                    <h3>Quick Actions</h3>
+                    <div class="job-actions">
+                        <button class="btn btn-primary" onclick="openPage('jobs')">Find Jobs</button>
+                        <button class="btn btn-secondary" onclick="openPage('post')">Post a Job</button>
+                    </div>
+                </div>`;
+        }
+
+        if (accountTab === "posted") {
+            c.innerHTML = `
+                <h2>My Jobs</h2>
+                <p class="section-subtitle">Openings you have published.</p>
+                <div class="panel">
+                    ${d.mine.length ? d.mine.map(job => acRow(job.title,
+                        [job.company + " • " + job.location + " • " + job.type, d.apps.filter(a => a.jobId === job.id).length + " applicant(s)"],
+                        `<div class="job-actions">
+                            <button class="small-btn" onclick="viewJob(${job.id})">View</button>
+                            <button class="small-btn" onclick="viewJobApplicants(${job.id})">Applicants</button>
+                            <button class="small-btn" onclick="deleteMyJob(${job.id})">Delete</button>
+                        </div>`)).join("") : emptyBox("You have not posted any jobs yet.", `<button class="btn btn-primary" onclick="openPage('post')">Post a Job</button>`)}
+                </div>`;
+        }
+
+        if (accountTab === "applicants") {
+            const list = applicantFilter ? d.received.filter(a => a.jobId === applicantFilter) : d.received;
+            const job = jobs.find(j => j.id === applicantFilter);
+            c.innerHTML = `
+                <h2>Applicants</h2>
+                <p class="section-subtitle">${job ? "Showing applicants for " + esc(job.title) + ". " : ""}Update a status and the applicant sees it right away.
+                    ${job ? `<button class="small-btn" onclick="applicantFilter=null;renderAccountDashboard()">Show all</button>` : ""}</p>
+                <div class="panel">
+                    ${list.length ? list.slice().reverse().map(a => acRow(a.applicant + " — " + a.jobTitle,
+                        [a.email + " • " + (a.phone || "No phone") + " • Applied " + a.date, a.message || "No message provided."],
+                        `<select class="status-select" onchange="updateAppStatus(${a.id}, this.value)">${STATUSES.map(s => `<option ${s === a.status ? "selected" : ""}>${s}</option>`).join("")}</select>`)).join("") : emptyBox("No applicants yet.")}
+                </div>`;
+        }
+
+        if (accountTab === "applications") {
+            c.innerHTML = `
+                <h2>My Applications</h2>
+                <p class="section-subtitle">Jobs you have applied for.</p>
+                <div class="panel">
+                    ${d.myApps.length ? d.myApps.slice().reverse().map(a => acRow(a.jobTitle, a.company + " • Applied " + a.date, badge(a.status))).join("") : emptyBox("You have not applied for any jobs yet.", browse)}
+                </div>`;
+        }
+
+        if (accountTab === "saved") {
+            c.innerHTML = `
+                <h2>Saved Jobs</h2>
+                <p class="section-subtitle">Jobs you bookmarked for later.</p>
+                <div class="panel">
+                    ${d.savedJobs.length ? d.savedJobs.map(job => acRow(job.title, job.company + " • " + job.location,
+                        `<div class="job-actions"><button class="small-btn" onclick="viewJob(${job.id})">View Job</button><button class="small-btn" onclick="openApply(${job.id})">Apply</button></div>`)).join("") : emptyBox("No saved jobs yet.", browse)}
+                </div>`;
+        }
+
+        if (accountTab === "settings") {
+            c.innerHTML = `
+                <h2>Account Settings</h2>
+                <p class="section-subtitle">Update your details and password.</p>
+                <div class="panel">
+                    <h3>Profile</h3>
+                    <div class="form-group"><label>Full Name</label><input class="input" id="accountEditName" value="${esc(currentUser.name)}"></div>
+                    <div class="form-group"><label>Email</label><input class="input" value="${esc(currentUser.email)}" disabled></div>
+                    <div class="form-group"><label>Account Type</label>
+                        <select class="input" id="accountEditRole">${["Job Seeker", "Employer"].map(r => `<option ${r === currentUser.role ? "selected" : ""}>${r}</option>`).join("")}</select></div>
+                    <button class="btn btn-primary" onclick="saveAccountDetails()">Save Changes</button>
+                </div>
+                <div class="panel">
+                    <h3>Change Password</h3>
+                    <div class="form-group"><label>Current Password</label><input class="input" type="password" id="pwOld" autocomplete="current-password"></div>
+                    <div class="form-group"><label>New Password</label><input class="input" type="password" id="pwNew" autocomplete="new-password"></div>
+                    <button class="btn btn-secondary" onclick="changePassword()">Update Password</button>
+                </div>`;
+        }
+    }
+
+    function saveAccountDetails() {
+        const newName = document.getElementById("accountEditName").value.trim();
+        if (newName.length < 2) return showToast("Please enter a valid name.");
+        const role = document.getElementById("accountEditRole").value;
+
+        const accounts = getAccounts();
+        const account = accounts.find(a => a.id === currentUser.id);
+        if (account) { account.name = newName; account.role = role; }
+        saveAccounts(accounts);
+
+        jobs.forEach(j => { if (j.ownerId === currentUser.id) j.ownerName = newName; });
+        localStorage.setItem("communityJobs", JSON.stringify(jobs));
+
+        currentUser.name = newName;
+        currentUser.role = role;
+        localStorage.setItem("communityCurrentUser", JSON.stringify(currentUser));
+        refreshAccountUI();
+        showToast("Account details updated.");
+    }
+
+    async function changePassword() {
+        const oldPw = document.getElementById("pwOld").value;
+        const newPw = document.getElementById("pwNew").value;
+        if (newPw.length < 6) return showToast("New password must be at least 6 characters.");
+
+        const accounts = getAccounts();
+        const account = accounts.find(a => a.id === currentUser.id);
+        const oldHash = await hashPw(oldPw);
+        if (!account || (account.password !== oldHash && account.password !== oldPw)) return showToast("Current password is incorrect.");
+
+        account.password = await hashPw(newPw);
+        saveAccounts(accounts);
+        document.getElementById("pwOld").value = "";
+        document.getElementById("pwNew").value = "";
+        showToast("Password updated.");
+    }
+
+    function updateAppStatus(appId, status) {
+        const apps = JSON.parse(localStorage.getItem("applications") || "[]");
+        const app = apps.find(a => a.id === appId);
+        if (!app) return;
+        app.status = status;
+        localStorage.setItem("applications", JSON.stringify(apps));
+        updateApplicationList();
+        renderAccountDashboard();
+        showToast("Status updated to " + status + ".");
+    }
+
+    function deleteMyJob(jobId) {
+        const job = jobs.find(j => j.id === jobId);
+        if (!currentUser || !job || job.ownerId !== currentUser.id) return;
+        if (!confirm("Delete this job posting?")) return;
+
+        jobs = jobs.filter(j => j.id !== jobId);
+        localStorage.setItem("communityJobs", JSON.stringify(jobs));
+        filterJobs();
+        renderAccountDashboard();
+        document.getElementById("homeJobs").innerText = jobs.length;
+        showToast("Job posting deleted.");
+    }
+
+    function viewJob(jobId) {
+        const job = jobs.find(j => j.id === jobId);
+        if (!job) return;
+        openPage("jobs");
+        document.getElementById("searchInput").value = job.title;
+        filterJobs();
+    }
+
+    function viewJobApplicants(jobId) {
+        applicantFilter = jobId;
+        showAccountTab("applicants");
+    }
+
+
+        /* ==========================================
+       PAGE NAVIGATION
+    ========================================== */
+
+    function openPage(pageId) {
+
+        if (["post", "applications", "accountDashboard"].includes(pageId) && !currentUser) {
+            showToast("Please log in to continue.");
+            afterAuth = pageId;
+            authMode = "login";
+            pageId = "authPage";
+            updateAuthUI();
+        } else if (pageId === "authPage" && currentUser) {
+            pageId = "accountDashboard";
+        }
+
+        currentPageId = pageId;
+        if (pageId === "accountDashboard") renderAccountDashboard();
+
+        document.querySelectorAll(".page").forEach(page => {
+            page.classList.remove("active");
+        });
+
+        const page = document.getElementById(pageId);
+
+        if (page) {
+            page.classList.add("active");
+        }
+
+        document.querySelectorAll(".nav-btn").forEach(button => {
+            button.classList.remove("active");
+
+            if (button.dataset.page === pageId) {
+                button.classList.add("active");
+            }
+        });
+
+        document.getElementById("navigation").classList.remove("open");
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+    }
+
+
+    document.querySelectorAll(".nav-btn").forEach(button => {
+
+        button.addEventListener("click", () => {
+            openPage(button.dataset.page);
+        });
+
+    });
+
+
+    function toggleMenu() {
+        document.getElementById("navigation").classList.toggle("open");
+    }
+
+
+    /* ==========================================
+       DISPLAY JOBS
+    ========================================== */
+
+    function displayJobs(list = jobs) {
+
+        const grid = document.getElementById("jobGrid");
+
+        grid.innerHTML = "";
+
+        if (list.length === 0) {
+
+            grid.innerHTML = `
+                <div class="panel" style="grid-column:1/-1;text-align:center;">
+                    <h3>No jobs found</h3>
+                    <p style="color:#8a817a;">
+                        Try another keyword or category.
+                    </p>
+                </div>
+            `;
+
+            return;
+        }
+
+
+        list.forEach(job => {
+
+            const card = document.createElement("div");
+
+            card.className = "job-card";
+
+            card.innerHTML = `
+
+                <div class="job-top">
+
+                    <div class="company-icon">
+                        ${job.icon || "💼"}
+                    </div>
+
+                    <button
+                        class="save-btn ${isSaved(job.id) ? 'saved' : ''}"
+                        onclick="toggleSave(${job.id}, this)">
+                        ${isSaved(job.id) ? "♥" : "♡"}
+                    </button>
+
+                </div>
+
+                <h3>${esc(job.title)}</h3>
+
+                <div class="company">
+                    ${esc(job.company)}
+                </div>
+
+                <div class="job-info">
+
+                    <span class="tag">
+                        ${esc(job.category)}
+                    </span>
+
+                    <span class="tag">
+                        ${esc(job.type)}
+                    </span>
+
+                    <span class="tag">
+                        📍 ${esc(job.location)}
+                    </span>
+
+                </div>
+
+                <p class="job-description">
+                    ${esc(job.description)}
+                </p>
+
+                <div class="job-owner">
+                    Posted by ${job.ownerId === (currentUser && currentUser.id) ? "You" : (job.ownerName || "Community Employer")}
+                </div>
+
+                <div class="job-bottom">
+                    <span class="salary">${job.salary || "Salary negotiable"}</span>
+                    <button class="btn btn-primary" onclick="openApply(${job.id})">Apply</button>
+                </div>
+
+                <div class="interaction-row">
+                    <button class="small-btn" onclick="toggleCommentBox(${job.id})">💬 Comment</button>
+                    <button class="small-btn" onclick="shareJob(${job.id})">↗ Share</button>
+                    <button class="small-btn" onclick="contactPoster(${job.id})">✉ Contact</button>
+                </div>
+
+                <div class="comment-box" id="commentBox-${job.id}">
+                    <textarea class="input" id="comment-${job.id}" placeholder="Write a comment or question..."></textarea>
+                    <button class="small-btn" onclick="addJobComment(${job.id})">Post Comment</button>
+                    <div id="comments-${job.id}"></div>
+                </div>
+
+            `;
+
+            grid.appendChild(card);
+
+        });
+
+    }
+
+
+    displayJobs();
+
+
+    /* ==========================================
+       SEARCH / FILTER
+    ========================================== */
+
+    function filterJobs() {
+
+        const search =
+            document.getElementById("searchInput")
+            .value
+            .toLowerCase();
+
+        const category =
+            document.getElementById("categoryFilter")
+            .value;
+
+        const type =
+            document.getElementById("typeFilter")
+            .value;
+
+
+        const filtered = jobs.filter(job => {
+
+            const matchesSearch =
+                job.title.toLowerCase().includes(search) ||
+                job.company.toLowerCase().includes(search) ||
+                job.description.toLowerCase().includes(search) ||
+                job.location.toLowerCase().includes(search);
+
+            const matchesCategory =
+                category === "all" ||
+                job.category === category;
+
+            const matchesType =
+                type === "all" ||
+                job.type === type;
+
+            return matchesSearch &&
+                   matchesCategory &&
+                   matchesType;
+
+        });
+
+        displayJobs(filtered);
+    }
+
+
+    document.getElementById("searchInput")
+        .addEventListener("input", filterJobs);
+
+    document.getElementById("categoryFilter")
+        .addEventListener("change", filterJobs);
+
+    document.getElementById("typeFilter")
+        .addEventListener("change", filterJobs);
+
+
+    /* ==========================================
+       SAVE JOB
+    ========================================== */
+
+    function toggleSave(jobId, button) {
+        if (!requireLogin("save jobs")) return;
+
+        const key = "savedJobs_" + currentUser.id;
+        const saved = JSON.parse(localStorage.getItem(key) || "[]");
+        const index = saved.indexOf(jobId);
+
+        if (index === -1) {
+            saved.push(jobId);
+            button.classList.add("saved");
+            button.innerHTML = "♥";
+            showToast("Job saved to your account.");
+        } else {
+            saved.splice(index, 1);
+            button.classList.remove("saved");
+            button.innerHTML = "♡";
+            showToast("Job removed from saved jobs.");
+        }
+
+        localStorage.setItem(key, JSON.stringify(saved));
+        renderAccountDashboard();
+    }
+
+    function toggleCommentBox(jobId) {
+        if (!requireLogin("comment on jobs")) return;
+        const box = document.getElementById("commentBox-" + jobId);
+        box.classList.toggle("show");
+        renderComments(jobId);
+    }
+
+    function addJobComment(jobId) {
+        if (!requireLogin("comment on jobs")) return;
+
+        const input = document.getElementById("comment-" + jobId);
+        const message = input.value.trim();
+        if (!message) return;
+
+        const comments = JSON.parse(localStorage.getItem("jobComments") || "[]");
+        comments.push({
+            id: Date.now(),
+            jobId,
+            userId: currentUser.id,
+            userName: currentUser.name,
+            message,
+            date: new Date().toLocaleDateString()
+        });
+        localStorage.setItem("jobComments", JSON.stringify(comments));
+        input.value = "";
+        renderComments(jobId);
+        showToast("Comment posted.");
+    }
+
+    function renderComments(jobId) {
+        const target = document.getElementById("comments-" + jobId);
+        if (!target) return;
+
+        const comments = JSON.parse(localStorage.getItem("jobComments") || "[]")
+            .filter(c => c.jobId === jobId);
+
+        target.innerHTML = comments.length ? comments.map(c => `
+            <div style="padding:9px 0;border-bottom:1px solid var(--border);font-size:12px;">
+                <strong>${esc(c.userName)}</strong> <span style="color:var(--muted);">${c.date}</span>
+                <div style="color:var(--muted);margin-top:3px;">${esc(c.message)}</div>
+            </div>
+        `).join("") : `<p style="color:var(--muted);font-size:12px;margin-top:8px;">No comments yet.</p>`;
+    }
+
+    function shareJob(jobId) {
+        const job = jobs.find(j => j.id === jobId);
+        if (!job) return;
+
+        const text = `${esc(job.title)} at ${esc(job.company)} — ${esc(job.location)}`;
+        if (navigator.share) {
+            navigator.share({ title: job.title, text }).catch(() => {});
+        } else {
+            navigator.clipboard?.writeText(text);
+            showToast("Job details copied to clipboard.");
+        }
+    }
+
+    function contactPoster(jobId) {
+        if (!requireLogin("contact employers")) return;
+        const job = jobs.find(j => j.id === jobId);
+        showToast("You can contact " + (job?.company || "the employer") + " through your application.");
+    }
+
+
+
+    /* ==========================================
+       APPLY MODAL
+    ========================================== */
+
+    function openApply(jobId) {
+
+        const job = jobs.find(item => item.id === jobId);
+
+        if (!job) return;
+
+        document.getElementById("selectedJob").value = job.id;
+        if (currentUser) {
+            document.getElementById("applicantName").value = currentUser.name;
+            document.getElementById("applicantEmail").value = currentUser.email;
+        }
+
+        document.querySelector("#applyModal h2").innerText =
+            "Apply for " + job.title;
+
+        document.getElementById("applyModal")
+            .classList.add("show");
+
+    }
+
+
+    function closeModal() {
+
+        document.getElementById("applyModal")
+            .classList.remove("show");
+
+    }
+
+
+    document.getElementById("applyModal")
+        .addEventListener("click", function(event) {
+
+            if (event.target === this) {
+                closeModal();
+            }
+
+        });
+
+
+    /* ==========================================
+       APPLICATION SUBMISSION
+    ========================================== */
+
+    document.getElementById("applicationForm")
+        .addEventListener("submit", function(event) {
+
+            event.preventDefault();
+
+            if (!requireLogin("apply for jobs")) return;
+
+            const jobId =
+                Number(document.getElementById("selectedJob").value);
+
+            const job =
+                jobs.find(item => item.id === jobId);
+
+            const name =
+                document.getElementById("applicantName").value;
+
+            const email =
+                document.getElementById("applicantEmail").value;
+
+            const phone = document.getElementById("applicantPhone").value;
+            const message = document.getElementById("applicantMessage").value;
+
+            const applications =
+                JSON.parse(
+                    localStorage.getItem("applications") || "[]"
+                );
+
+
+            applications.push({
+
+                id: Date.now(),
+                jobId: job.id,
+                ownerId: currentUser.id,
+                jobOwnerId: job.ownerId || null,
+
+                jobTitle: job.title,
+
+                company: job.company,
+
+                applicant: name,
+
+                email: email,
+                phone: phone,
+                message: message,
+
+                date: new Date().toLocaleDateString(),
+
+                status: "Pending"
+
+            });
+
+
+            localStorage.setItem(
+                "applications",
+                JSON.stringify(applications)
+            );
+
+
+            this.reset();
+
+            closeModal();
+
+            updateApplicationList();
+
+            showToast(
+                "Application submitted successfully!"
+            );
+
+            openPage("applications");
+
+        });
+
+
+    /* ==========================================
+       APPLICATION LIST
+    ========================================== */
+
+    function updateApplicationList() {
+
+        const list =
+            document.getElementById("applicationList");
+
+        const applications =
+            JSON.parse(localStorage.getItem("applications") || "[]")
+            .filter(a => !currentUser || a.ownerId === currentUser.id);
+
+        document.getElementById("applicationCount")
+            .innerText = applications.length;
+
+        list.innerHTML = "";
+
+        applications.forEach(application => {
+
+            const item =
+                document.createElement("div");
+
+            item.className = "application";
+
+            item.innerHTML = `
+
+                <div class="application-info">
+
+                    <strong>
+                        ${esc(application.jobTitle)}
+                    </strong>
+
+                    <span>
+                        ${esc(application.company)}
+                        • Applied ${esc(application.date)}
+                    </span>
+
+                </div>
+
+                <span class="status pending">
+                    ${esc(application.status)}
+                </span>
+
+            `;
+
+            list.prepend(item);
+
+        });
+
+    }
+
+
+    updateApplicationList();
+
+
+    /* ==========================================
+       POST NEW JOB
+    ========================================== */
+
+    document.getElementById("jobForm")
+        .addEventListener("submit", function(event) {
+
+            event.preventDefault();
+
+            if (!requireLogin("post a job")) return;
+
+
+            const newJob = {
+
+                id: Date.now(),
+                ownerId: currentUser ? currentUser.id : "demo",
+                ownerName: currentUser ? currentUser.name : "Community Employer",
+                applications: [],
+
+                title:
+                    document.getElementById("jobTitle").value,
+
+                company:
+                    document.getElementById("jobCompany").value,
+
+                category:
+                    document.getElementById("jobCategory").value,
+
+                type:
+                    document.getElementById("jobType").value,
+
+                location:
+                    document.getElementById("jobLocation").value,
+
+                salary:
+                    document.getElementById("jobSalary").value ||
+                    "Salary negotiable",
+
+                description:
+                    document.getElementById("jobDescription").value,
+
+                icon: "💼"
+
+            };
+
+
+            jobs.unshift(newJob);
+
+
+            localStorage.setItem(
+                "communityJobs",
+                JSON.stringify(jobs)
+            );
+
+
+            this.reset();
+
+            displayJobs();
+
+            document.getElementById("homeJobs")
+                .innerText = jobs.length;
+
+
+            showToast(
+                "Your job has been published!"
+            );
+
+            openPage("jobs");
+
+        });
+
+
+    /* ==========================================
+       TOAST MESSAGE
+    ========================================== */
+
+    let toastTimer;
+
+    function showToast(message) {
+
+        const toast =
+            document.getElementById("toast");
+
+        toast.innerText = message;
+
+        toast.classList.add("show");
+
+        clearTimeout(toastTimer);
+
+        toastTimer = setTimeout(() => {
+
+            toast.classList.remove("show");
+
+        }, 3000);
+
+    }
+
+
+    /* ==========================================
+       UPDATE HOME JOB COUNT
+    ========================================== */
+
+    document.getElementById("homeJobs")
+        .innerText = jobs.length;
+
+    /* Initialize account UI */
+    refreshAccountUI();
+
+</script>
+
+</body>
+</html>
